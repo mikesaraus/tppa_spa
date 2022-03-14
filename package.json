@@ -1,0 +1,51 @@
+{
+  "name": "tppa_spa",
+  "version": "0.0.1",
+  "description": "Single Page Application",
+  "private": true,
+  "main": "app.js",
+  "scripts": {
+    "dev": "DEBUG=express:* nodemon -V --delay 2500ms --watch '*.*' --watch .env --ext 'js,json' app.js --log",
+    "dev-nolog": "DEBUG=express:* nodemon -V --delay 2500ms --watch '*.*' --watch .env --ext 'js,json' app.js",
+    "start": "NODE_ENV=production node app.js --log 2>&1 | tee ./log/console-\"$(date '+%Y%m%d-%H%M%S')\".log -a -p"
+  },
+  "keywords": [
+    "NodeJS",
+    "Express",
+    "Quasarv3",
+    "SPA"
+  ],
+  "displayName": "Trans Pilipinas Power & Automation Inc.",
+  "productName": "Payment System",
+  "author": {
+    "name": "Mike Saraus",
+    "email": "mizkie98@gmail.com",
+    "url": "https://gitlab.com/mikesaraus"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/mikesaraus/expsql_rtapi.git"
+  },
+  "bugs": {
+    "url": "https://gitlab.com/mikesaraus/tppa_spa/issues"
+  },
+  "homepage": "https://gitlab.com/mikesaraus/tppa_spa#readme",
+  "license": "MIT",
+  "dependencies": {
+    "app-root-path": "^3.0.0",
+    "auto-git-update": "^2.1.0",
+    "body-parser": "^1.19.2",
+    "compression": "^1.7.4",
+    "connect-history-api-fallback": "^1.6.0",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "fs": "^0.0.1-security",
+    "fs-extra": "^10.0.1",
+    "morgan": "^1.10.0",
+    "node-cron": "^3.0.0",
+    "simple-git": "^3.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
