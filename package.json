@@ -44,9 +44,7 @@
     "fs-extra": "^10.0.1",
     "morgan": "^1.10.0",
     "node-cron": "^3.0.0",
+    "nodemon": "^2.0.15",
     "simple-git": "^3.3.0"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.15"
   }
 }

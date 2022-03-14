@@ -13,29 +13,32 @@ const compression = require('compression'),
   cron = require('node-cron')
 
 const { throttle, decodeURL } = require('./lib/middleware'),
-  { readFileSync, existsSync } = require('fs'),
-  CGU = require('cron-git-updater')
+  { readFileSync, existsSync } = require('fs')
 
 // Some Process
 process.title = _.npm_package_name || process.title
 process.env.TZ = _.TZ || 'Asia/Manila'
 
-// App Package Information
-const pkg = require('./package.json')
+if (_.NODE_ENV == 'production') {
+  // Auto Update App on Production
+  const pkg = require('./package.json')
+  const CGU = require('cron-git-updater')
 
-/**
- * New Updater
- */
-const newUpdater = new CGU({
-  repository: pkg.repository.url,
-  branch: 'main',
-  tempLocation: '../history',
-  keepAllBackup: true,
-  exitOnComplete: false,
-})
+  /**
+   * New Updater
+   */
+  const newUpdater = new CGU({
+    repository: pkg.repository.url,
+    branch: 'main',
+    tempLocation: '../history',
+    keepAllBackup: true,
+    exitOnComplete: false,
+  })
 
-// Check for Updates every 12 Midnight
-newUpdater.schedule('0 0 * * *')
+  // Check for Updates every 12 Midnight
+  newUpdater.schedule('0 0 * * *', _.TZ)
+  console.log('Auto update is scheduled every 12 midnight.')
+}
 
 // Some Middlewares
 app
