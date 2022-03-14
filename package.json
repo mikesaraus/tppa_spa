@@ -1,6 +1,8 @@
 {
   "name": "tppa_spa",
-  "version": "0.0.1",
+  "version": "0.0.2",
+  "productName": "Payment System",
+  "displayName": "Trans Pilipinas Power & Automation Inc.",
   "description": "Single Page Application",
   "private": true,
   "main": "app.js",
@@ -15,8 +17,6 @@
     "Quasarv3",
     "SPA"
   ],
-  "displayName": "Trans Pilipinas Power & Automation Inc.",
-  "productName": "Payment System",
   "author": {
     "name": "Mike Saraus",
     "email": "mizkie98@gmail.com",
@@ -24,7 +24,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://gitlab.com/mikesaraus/expsql_rtapi.git"
+    "url": "git+https://gitlab.com/mikesaraus/tppa_spa.git"
   },
   "bugs": {
     "url": "https://gitlab.com/mikesaraus/tppa_spa/issues"

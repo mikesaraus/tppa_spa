@@ -14,22 +14,28 @@ const compression = require('compression'),
 
 const { throttle, decodeURL } = require('./lib/middleware'),
   { readFileSync, existsSync } = require('fs'),
-  CGU = require('cron-updater')
-
-const newUpdater = new CGU({
-  repository: 'https://gitlab.com/mikesaraus/expsql_rtapi.git',
-  branch: 'development',
-  fromReleases: false,
-  tempLocation: '../history',
-  ignoreFiles: ['.env'],
-  exitOnComplete: false,
-})
-// newUpdater.update()
-// newUpdater.forceUpdate()
+  CGU = require('cron-git-updater')
 
 // Some Process
 process.title = _.npm_package_name || process.title
 process.env.TZ = _.TZ || 'Asia/Manila'
+
+// App Package Information
+const pkg = require('./package.json')
+
+/**
+ * New Updater
+ */
+const newUpdater = new CGU({
+  repository: pkg.repository.url,
+  branch: 'main',
+  tempLocation: '../history',
+  keepAllBackup: true,
+  exitOnComplete: false,
+})
+
+// Check for Updates every 12 Midnight
+newUpdater.schedule('0 0 * * *')
 
 // Some Middlewares
 app
