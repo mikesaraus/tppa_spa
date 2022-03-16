@@ -35,9 +35,12 @@ if (_.NODE_ENV == 'production') {
     exitOnComplete: false,
   })
 
-  // Check for Updates every 12 Midnight
-  newUpdater.schedule('0 0 * * *', _.TZ)
-  console.log('Auto update is scheduled every 12 midnight.')
+  if (_.CRON_UPDATE != 'false' && _.CRON_UPDATE != false) {
+    // Check for Updates Default every 12 Midnight
+    _.CRON_UPDATE = _.CRON_UPDATE || '0 0 * * *'
+    newUpdater.schedule(_.CRON_UPDATE, _.TZ)
+    console.log(`Auto update scheduled job [ ${_.CRON_UPDATE} ].`)
+  }
 }
 
 // Some Middlewares
