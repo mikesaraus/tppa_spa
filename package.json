@@ -1,6 +1,6 @@
 {
   "name": "tppa_spa",
-  "version": "0.0.2",
+  "version": "0.0.1",
   "productName": "Payment System",
   "displayName": "Trans Pilipinas Power & Automation Inc.",
   "description": "Single Page Application",
@@ -32,19 +32,15 @@
   "homepage": "https://gitlab.com/mikesaraus/tppa_spa#readme",
   "license": "MIT",
   "dependencies": {
-    "app-root-path": "^3.0.0",
-    "auto-git-update": "^2.1.0",
     "body-parser": "^1.19.2",
     "compression": "^1.7.4",
     "connect-history-api-fallback": "^1.6.0",
-    "cron-git-updater": "^0.0.2",
+    "cron-git-updater": "^0.0.4",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
-    "fs": "^0.0.1-security",
-    "fs-extra": "^10.0.1",
-    "morgan": "^1.10.0",
-    "node-cron": "^3.0.0",
-    "nodemon": "^2.0.15",
-    "simple-git": "^3.3.0"
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
   }
 }
