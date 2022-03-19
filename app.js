@@ -32,7 +32,10 @@ if (_.NODE_ENV == 'production') {
       repository: pkjson.repository.url,
       branch: 'main',
       tempLocation: _.CRON_UPDATE_BACKUP || '../history',
-      keepAllBackup: _.CRON_UPDATE_KEEPALL_BACKUP == 'false' || _.CRON_UPDATE_KEEPALL_BACKUP == false ? false : true,
+      keepAllBackup:
+        String(_.CRON_UPDATE_KEEPALL_BACKUP || '').toLowerCase() == 'false' || _.CRON_UPDATE_KEEPALL_BACKUP == false
+          ? false
+          : true,
     })
 
     if (_.CRON_UPDATE != 'false' && _.CRON_UPDATE != false) {
