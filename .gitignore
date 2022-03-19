@@ -1,7 +1,7 @@
 .env
 .DS_Store
 .thumbs.db
-node_modules
+/node_modules
 
 # Log Directory
 /log/*
