@@ -19,7 +19,7 @@ const fs = require('fs-extra'),
 process.title = _.npm_package_name || process.title
 process.env.TZ = _.TZ || 'Asia/Manila'
 
-if (_.NODE_ENV == 'production') {
+if (String(_.NODE_ENV || '').toLowerCase() != 'production') {
   // Production Mode
 
   if (_.CRON_UPDATE != 'false' && _.CRON_UPDATE != false) {
