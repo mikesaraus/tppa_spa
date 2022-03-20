@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "set DEBUG=express:* && nodemon -V --delay 2500ms --watch '*.*' --watch .env --ext 'js,json' app.js --log",
     "dev-nolog": "set DEBUG=express:* && nodemon -V --delay 2500ms --watch '*.*' --watch .env --ext 'js,json' app.js",
-    "start": "set NODE_ENV=production && node app.js --log 2>&1 | tee ./log/console-\"$(date '+%Y%m%d-%H%M%S')\".log -a -p"
+    "start": "set NODE_ENV=production && node app.js --log"
   },
   "keywords": [
     "NodeJS",
