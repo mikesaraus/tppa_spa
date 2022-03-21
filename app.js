@@ -19,32 +19,38 @@ const fs = require('fs-extra'),
 process.title = _.npm_package_name || process.title
 process.env.TZ = _.TZ || 'Asia/Manila'
 
-if (String(_.NODE_ENV || '').toLowerCase() != 'production') {
-  // Production Mode
+const CGU = require('cron-git-updater')
+const cgu_config = {
+  repository: pkjson.repository.url,
+  branch: 'main',
+  tempLocation: _.CRON_UPDATE_BACKUP || '../history',
+  keepAllBackup:
+    String(_.CRON_UPDATE_KEEPALL_BACKUP || '').toLowerCase() == 'false' || _.CRON_UPDATE_KEEPALL_BACKUP == false
+      ? false
+      : true,
+}
 
-  if (_.CRON_UPDATE != 'false' && _.CRON_UPDATE != false) {
-    // Auto Update App on Production
-    const CGU = require('cron-git-updater')
+if (process.argv.includes('--update')) {
+  const doUpdater = new CGU({ ...cgu_config, exitOnComplete: true })
+  doUpdater.update()
+}
+
+if (process.argv.includes('--force-update')) {
+  const forceUpdater = new CGU({ ...cgu_config, exitOnComplete: true })
+  forceUpdater.forceUpdate()
+}
+
+if (String(_.NODE_ENV || '').toLowerCase() == 'production' || process.argv.includes('--schedule-update')) {
+  if (String(_.CRON_UPDATE || '').toLowerCase() != 'false' || process.argv.includes('--schedule-update')) {
     /**
-     * New Updater
+     * Schedule Auto Update
      */
-    const newUpdater = new CGU({
-      repository: pkjson.repository.url,
-      branch: 'main',
-      tempLocation: _.CRON_UPDATE_BACKUP || '../history',
-      keepAllBackup:
-        String(_.CRON_UPDATE_KEEPALL_BACKUP || '').toLowerCase() == 'false' || _.CRON_UPDATE_KEEPALL_BACKUP == false
-          ? false
-          : true,
-    })
-
-    if (_.CRON_UPDATE != 'false' && _.CRON_UPDATE != false) {
-      const valid = newUpdater.validateSchedule(_.CRON_UPDATE)
-      // Check for Updates Default every 12 Midnight
-      if (!valid) _.CRON_UPDATE = '0 0 * * *'
-      newUpdater.schedule(_.CRON_UPDATE, _.TZ)
-      console.log(`Auto update task scheduled [ ${_.CRON_UPDATE} ].`)
-    }
+    const newUpdater = new CGU(cgu_config)
+    const valid = newUpdater.validateSchedule(_.CRON_UPDATE)
+    // Check for Updates Default every 12 Midnight
+    if (!valid) _.CRON_UPDATE = '0 0 * * *'
+    newUpdater.schedule(_.CRON_UPDATE, _.TZ)
+    console.log(`Auto update task scheduled [ ${_.CRON_UPDATE} ]`)
   }
 }
 
